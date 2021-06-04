@@ -44,7 +44,7 @@ function init() {
 
     // Water
 
-    waterGeometry = new THREE.PlaneGeometry( 10000, 10000, 1000, 1000 );
+    waterGeometry = new THREE.PlaneGeometry( 10000, 10000 );
     // const wireframe = new THREE.WireframeGeometry( waterGeometry );
     // const line = new THREE.LineSegments( wireframe );
     // line.material.depthTest = false;
@@ -151,7 +151,7 @@ function init() {
     // mesh = new THREE.Mesh( geometry, material );
     // scene.add( mesh );
     // console.log(mesh)
-    //
+    // //
     // geometryPostions = waterGeometry.attributes.position;
 
    
@@ -217,7 +217,7 @@ function render() {
     // mesh.position.y = Math.sin( time ) * 20 + 5;
     // mesh.rotation.x = time * 0.50;
     // mesh.rotation.z = time * 1.51;
-    water.material.uniforms[ 'alpha' ].value = 0.5 + Math.sin(alpha) * 0.5;
+    water.material.uniforms[ 'alpha' ].value = 4.5 * Math.sin( Math.random() * 0.125 );;
 
     // water.geometry.positon.y =  5.00 + Math.sin(alpha) * 0.25
     water.material.uniforms[ 'time' ].value += 1.0 / 40.0;
@@ -225,7 +225,7 @@ function render() {
 
     for ( let i = 0; i < displacement.length; i ++ ) {
 
-        displacement[ i ] = Math.sin( 0.1 * i + time );
+        displacement[ i ] = Math.sin( 0.1 * i + time2 );
 
         noise[ i ] += 0.5 * ( 0.5 - Math.random() );
         noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 5, 5 );
