@@ -217,7 +217,7 @@ function render() {
     // mesh.position.y = Math.sin( time ) * 20 + 5;
     // mesh.rotation.x = time * 0.50;
     // mesh.rotation.z = time * 1.51;
-    water.material.uniforms[ 'alpha' ].value = 4.5 * Math.sin( Math.random() * 0.125 );;
+    water.material.uniforms[ 'alpha' ].value = 2;
 
     // water.geometry.positon.y =  5.00 + Math.sin(alpha) * 0.25
     water.material.uniforms[ 'time' ].value += 1.0 / 40.0;
