@@ -1,0 +1,25 @@
+{
+  "name": "ls",
+  "version": "1.0.0",
+  "description": "[![Work in Repl.it](https://classroom.github.com/assets/work-in-replit-14baed9a392b3a25080506f3b7b6d57f295ec2978f6f33ec97e36a161684cbe9.svg)](https://classroom.github.com/online_ide?assignment_repo_id=4500259&assignment_repo_type=AssignmentRepo) # Atividade 2 - Processamento de Imagens usando Three.JS",
+  "main": "video.js",
+  "watch": {
+    "test": "{public,test}/*.js"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "watch": "npm-watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jquery": "^3.6.0",
+    "npm-watch": "^0.9.0",
+    "three": "^0.127.0"
+  },
+  "devDependencies": {
+    "start-watch": "^3.0.0"
+  }
+}

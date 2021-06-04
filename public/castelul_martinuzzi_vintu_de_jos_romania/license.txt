@@ -1,0 +1,11 @@
+Model Information:
+* title:	Castelul Martinuzzi, Vințu de Jos, Romania
+* source:	https://sketchfab.com/3d-models/castelul-martinuzzi-vintu-de-jos-romania-7b87b41e133e4fa9a301e04bfaa8c844
+* author:	Institutul Național al Patrimoniului (https://sketchfab.com/cimec)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Castelul Martinuzzi, Vințu de Jos, Romania" (https://sketchfab.com/3d-models/castelul-martinuzzi-vintu-de-jos-romania-7b87b41e133e4fa9a301e04bfaa8c844) by Institutul Național al Patrimoniului (https://sketchfab.com/cimec) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
