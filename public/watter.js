@@ -22,6 +22,7 @@ var Water = function ( geometry, options ) {
 	var alpha = options.alpha !== undefined ? options.alpha : 1.0;
 	var time = options.time !== undefined ? options.time : 0.0;
 	var normalSampler = options.waterNormals !== undefined ? options.waterNormals : null;
+	var noiseTexture = options.noiseTexture !== undefined ? options.noiseTexture : null;
 	var sunDirection = options.sunDirection !== undefined ? options.sunDirection : new THREE.Vector3( 0.70707, 0.70707, 0.0 );
 	var sunColor = new THREE.Color( options.sunColor !== undefined ? options.sunColor : 0xffffff );
 	var waterColor = new THREE.Color( options.waterColor !== undefined ? options.waterColor : 0x7F7F7F );
@@ -30,6 +31,7 @@ var Water = function ( geometry, options ) {
 	var distortionScale = options.distortionScale !== undefined ? options.distortionScale : 20.0;
 	var side = options.side !== undefined ? options.side : THREE.FrontSide;
 	var fog = options.fog !== undefined ? options.fog : false;
+    var amplitude = 0.0;
 
 	//
 
@@ -70,6 +72,7 @@ var Water = function ( geometry, options ) {
 			THREE.UniformsLib[ 'lights' ],
 			{
 				'normalSampler': { value: null },
+                'noiseTexture': { value: null},
 				'mirrorSampler': { value: null },
 				'alpha': { value: 1.0 },
 				'time': { value: 0.0 },
@@ -80,7 +83,8 @@ var Water = function ( geometry, options ) {
 				'sunDirection': { value: new THREE.Vector3( 0.70707, 0.70707, 0 ) },
 				'eye': { value: new THREE.Vector3() },
 				'waterColor': { value: new THREE.Color( 0x555555 ) },
-                'resolution': { value: new THREE.Uniform( new THREE.Vector2() )}
+                'resolution': { value: new THREE.Uniform( new THREE.Vector2() )},
+                'amplitude': { value: 2.0}
 
 			}
 		] ),
@@ -105,6 +109,7 @@ var Water = function ( geometry, options ) {
 	material.uniforms[ 'alpha' ].value = alpha;
 	material.uniforms[ 'time' ].value = time;
 	material.uniforms[ 'normalSampler' ].value = normalSampler;
+	material.uniforms[ 'noiseTexture' ].value = noiseTexture;
 	material.uniforms[ 'sunColor' ].value = sunColor;
 	material.uniforms[ 'waterColor' ].value = waterColor;
 	material.uniforms[ 'sunDirection' ].value = sunDirection;
@@ -112,6 +117,7 @@ var Water = function ( geometry, options ) {
 
 	material.uniforms[ 'eye' ].value = eye;
 	material.uniforms[ 'resolution' ].value = resolution;
+	material.uniforms[ 'amplitude' ].value = amplitude;
 	scope.material = material;
 
 	scope.onBeforeRender = function ( renderer, scene, camera ) {

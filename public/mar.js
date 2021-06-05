@@ -14,7 +14,7 @@ var vertexDisplacimente;
 var  geometry , geometryPostions, waterGeometry;
 let alpha = 0;
 let count = 0;
-let displacement, noise;
+let displacement, noise, uvAttribute;
 
 init();
 animate();
@@ -36,7 +36,7 @@ function init() {
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
-    camera.position.set( 30, 30, 100 );
+    camera.position.set( 300, 300, 1000 );
 
     //
 
@@ -44,7 +44,8 @@ function init() {
 
     // Water
 
-    waterGeometry = new THREE.PlaneGeometry( 10000, 10000 );
+    // waterGeometry = new THREE.PlaneGeometry( 10000, 10000 );
+    waterGeometry = new THREE.PlaneBufferGeometry( 10000, 10000, 512, 512 );
     // const wireframe = new THREE.WireframeGeometry( waterGeometry );
     // const line = new THREE.LineSegments( wireframe );
     // line.material.depthTest = false;
@@ -55,6 +56,12 @@ function init() {
 	// 			// gridHelper.position.x = - 150;
 	// 			scene.add( gridHelper );
     // scene.add( line );
+    // var noiseTexture = new THREE.ImageUtils.loadTexture( './cloud.png' );
+	// noiseTexture.wrapS = noiseTexture.wrapT = THREE.RepeatWrapping; 
+    // console.log(noiseTexture);
+	// magnitude of noise effect
+	var noiseScale = 0.5;
+	
 
     water = new Water(
         waterGeometry,
@@ -119,12 +126,13 @@ function init() {
     vertexDisplacimente = 4.0;
     displacement = new Float32Array( water.geometry.attributes.position.count );
     noise = new Float32Array( water.geometry.attributes.position.count );
-
     for ( let i = 0; i < displacement.length; i ++ ) {
 
         noise[ i ] = Math.random() * 5;
 
     }
+
+    
 
     water.geometry.setAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
     // vertexDisplacimente = new Float32Array(water.geometry.attributes.position.count)
@@ -159,8 +167,8 @@ function init() {
     controls = new OrbitControls( camera, renderer.domElement );
     controls.maxPolarAngle = Math.PI * 0.495;
     controls.target.set( 0, 10, 0 );
-    controls.minDistance = 40.0;
-    controls.maxDistance = 200.0;
+    controls.minDistance = 400.0;
+    controls.maxDistance = 20000.0;
     controls.update();
 
     //
@@ -186,7 +194,6 @@ function init() {
     folderWater.open();
 
     //
-
     window.addEventListener( 'resize', onWindowResize );
 
 }
@@ -217,7 +224,7 @@ function render() {
     // mesh.position.y = Math.sin( time ) * 20 + 5;
     // mesh.rotation.x = time * 0.50;
     // mesh.rotation.z = time * 1.51;
-    water.material.uniforms[ 'alpha' ].value = 2;
+    water.material.uniforms[ 'amplitude' ].value =  30.00 + 0.25;
 
     // water.geometry.positon.y =  5.00 + Math.sin(alpha) * 0.25
     water.material.uniforms[ 'time' ].value += 1.0 / 40.0;
@@ -225,14 +232,35 @@ function render() {
 
     for ( let i = 0; i < displacement.length; i ++ ) {
 
-        displacement[ i ] = Math.sin( 0.1 * i + time2 );
+        if ( (i > displacement.length/2)){
+            displacement[ i ] = Math.sin( 0.1 * i + time2 );
 
-        noise[ i ] += 0.5 * ( 0.5 - Math.random() );
-        noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 5, 5 );
+            noise[ i ] += 0.5 * ( 0.5 - Math.random() );
+            noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 5, 5 );
 
-        displacement[ i ] += noise[ i ];
+            displacement[ i ] += noise[ i ];
+        }
 
     }
+
+    uvAttribute = water.geometry.attributes.uv;
+
+
+    for (var i = 0; i < uvAttribute.count; i++) {
+
+        var u = uvAttribute.getX(i);
+        var v = uvAttribute.getY(i);
+  
+        // do something with uv
+        u = u + Math.random() * Math.random();
+        v = v + Math.random() * Math.random() * 0.5;
+  
+  
+        // write values back to attribute
+        uvAttribute.setXY(i, u, v);
+      }
+
+   
 
     water.geometry.attributes.displacement.needsUpdate = true;
 
@@ -243,6 +271,8 @@ function render() {
     // }
 
     water.geometry.needsUpdate = true;
+    uvAttribute.needsUpdate = true;
+
 
     renderer.render( scene, camera );
 
