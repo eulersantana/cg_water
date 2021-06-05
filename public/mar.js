@@ -219,27 +219,26 @@ function animate() {
 function render() {
 
     const time2 = clock.getElapsedTime() * 10;
-    const time = performance.now() * 0.001;
+    const time = performance.now() * 0.01; //velocidade das ondas
 
     // mesh.position.y = Math.sin( time ) * 20 + 5;
     // mesh.rotation.x = time * 0.50;
     // mesh.rotation.z = time * 1.51;
-    water.material.uniforms[ 'amplitude' ].value =  30.00 + 0.25;
+    water.material.uniforms[ 'amplitude' ].value =  30.00 + 0.25; // tamanho das ondas
 
     // water.geometry.positon.y =  5.00 + Math.sin(alpha) * 0.25
-    water.material.uniforms[ 'time' ].value += 1.0 / 40.0;
+    water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
 
 
     for ( let i = 0; i < displacement.length; i ++ ) {
 
-        if ( (i > displacement.length/2)){
-            displacement[ i ] = Math.sin( 0.1 * i + time2 );
-
+        // if ( (i > displacement.length/2)){
+            displacement[ i ] = Math.sin( 0.1 * i + time );
             noise[ i ] += 0.5 * ( 0.5 - Math.random() );
-            noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 5, 5 );
+            noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 100,3);
 
             displacement[ i ] += noise[ i ];
-        }
+        // }
 
     }
 
@@ -253,7 +252,7 @@ function render() {
   
         // do something with uv
         u = u + Math.random() * Math.random();
-        v = v + Math.random() * Math.random() * 0.5;
+        v = v + Math.random() * Math.random() * 50.0;
   
   
         // write values back to attribute
