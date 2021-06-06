@@ -14,7 +14,10 @@ var vertexDisplacimente;
 var  geometry , geometryPostions, waterGeometry;
 let alpha = 0;
 let count = 0;
+let velocity = {'value': 10};
+let altura = {'value': 2};
 let displacement, noise, uvAttribute;
+let color = ['#ffffff', '#f7f7f7', '#e0e0e0', '#787878']
 
 init();
 animate();
@@ -32,9 +35,9 @@ function init() {
     container.appendChild( renderer.domElement );
 
     //
-
+    
     scene = new THREE.Scene();
-
+    scene.background = new THREE.Color(color[0]);
     camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
     camera.position.set( 300, 300, 1000 );
 
@@ -44,8 +47,8 @@ function init() {
 
     // Water
 
-    // waterGeometry = new THREE.PlaneGeometry( 10000, 10000 );
-    waterGeometry = new THREE.PlaneBufferGeometry( 10000, 10000, 512, 512 );
+    // waterGeometry = new THREE.PlaneGeometry( 10000, 10000, 512, 512  );
+    waterGeometry = new THREE.PlaneBufferGeometry( 10000, 10000, 50, 50 );
     // const wireframe = new THREE.WireframeGeometry( waterGeometry );
     // const line = new THREE.LineSegments( wireframe );
     // line.material.depthTest = false;
@@ -93,13 +96,13 @@ function init() {
 
     const sky = new Sky();
     sky.scale.setScalar( 10000 );
-    scene.add( sky );
+    // scene.add( sky );
 
     const skyUniforms = sky.material.uniforms;
 
-    skyUniforms[ 'turbidity' ].value = 10;
-    skyUniforms[ 'rayleigh' ].value = 2;
-    skyUniforms[ 'mieCoefficient' ].value = 0.005;
+    skyUniforms[ 'turbidity' ].value = 100;
+    skyUniforms[ 'rayleigh' ].value = 20;
+    skyUniforms[ 'mieCoefficient' ].value = 0.0005;
     skyUniforms[ 'mieDirectionalG' ].value = 0.8;
 
     const parameters = {
@@ -126,11 +129,13 @@ function init() {
     vertexDisplacimente = 4.0;
     displacement = new Float32Array( water.geometry.attributes.position.count );
     noise = new Float32Array( water.geometry.attributes.position.count );
+
     for ( let i = 0; i < displacement.length; i ++ ) {
 
         noise[ i ] = Math.random() * 5;
 
     }
+
 
     
 
@@ -155,12 +160,6 @@ function init() {
     geometry = new THREE.BoxGeometry( 30, 30, 30 );
 
     const material = new THREE.MeshStandardMaterial( { roughness: 0 } );
-
-    // mesh = new THREE.Mesh( geometry, material );
-    // scene.add( mesh );
-    // console.log(mesh)
-    // //
-    // geometryPostions = waterGeometry.attributes.position;
 
    
 
@@ -191,6 +190,8 @@ function init() {
     const folderWater = gui.addFolder( 'Water' );
     folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
     folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
+    // folderWater.add( velocity, 'value', 10,  100000, 1 ).name( 'Velocity' );
+    folderWater.add( altura, 'value',1,  60, 2 ).name( 'altura');
     folderWater.open();
 
     //
@@ -208,56 +209,64 @@ function onWindowResize() {
 }
 
 function animate() {
-
- 
     requestAnimationFrame( animate );
     render();
     stats.update();
 
 }
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
 function render() {
 
-    const time2 = clock.getElapsedTime() * 10;
+    // const time2 = clock.getElapsedTime() * 10;
+    // const time = performance.now() * (1/velocity.value); //velocidade das ondas
     const time = performance.now() * 0.01; //velocidade das ondas
 
-    // mesh.position.y = Math.sin( time ) * 20 + 5;
-    // mesh.rotation.x = time * 0.50;
-    // mesh.rotation.z = time * 1.51;
-    water.material.uniforms[ 'amplitude' ].value =  30.00 + 0.25; // tamanho das ondas
 
-    // water.geometry.positon.y =  5.00 + Math.sin(alpha) * 0.25
+    water.material.uniforms[ 'amplitude' ].value =  altura.value + 0.25; // tamanho das ondas
+
     water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
+    if (altura.value < 10){
+        scene.background = new THREE.Color(color[0]);
+    }
+    if (altura.value > 10 && altura.value < 20 ){
+        scene.background = new THREE.Color(color[1]);
+    }
+    if (altura.value > 20 && altura.value < 25 ){
+        scene.background = new THREE.Color(color[2]);
+    }
+    if (altura.value > 30){
+        scene.background = new THREE.Color(color[3]);
+    }
+    for ( let i = 0; i < displacement.length; i+=1 ) {
 
-
-    for ( let i = 0; i < displacement.length; i ++ ) {
-
-        // if ( (i > displacement.length/2)){
             displacement[ i ] = Math.sin( 0.1 * i + time );
             noise[ i ] += 0.5 * ( 0.5 - Math.random() );
             noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 100,3);
-
-            displacement[ i ] += noise[ i ];
-        // }
+            
+            displacement[i] += noise[ i ];
+   
 
     }
 
     uvAttribute = water.geometry.attributes.uv;
 
 
-    for (var i = 0; i < uvAttribute.count; i++) {
+    // for (var i = 0; i < uvAttribute.count; i++) {
 
-        var u = uvAttribute.getX(i);
-        var v = uvAttribute.getY(i);
+    //     var u = uvAttribute.getX(i);
+    //     var v = uvAttribute.getY(i);
   
-        // do something with uv
-        u = u + Math.random() * Math.random();
-        v = v + Math.random() * Math.random() * 50.0;
+    //     // do something with uv
+    //     u = u + Math.random() * Math.random();
+    //     v = v + Math.random() * Math.random() * 50.0;
   
   
-        // write values back to attribute
-        uvAttribute.setXY(i, u, v);
-      }
+    //     // write values back to attribute
+    //     uvAttribute.setXY(i, u, v);
+    //   }
 
    
 
