@@ -47,22 +47,8 @@ function init() {
 
     // Water
 
-    // waterGeometry = new THREE.PlaneGeometry( 10000, 10000, 512, 512  );
     waterGeometry = new THREE.PlaneBufferGeometry( 10000, 10000, 50, 50 );
-    // const wireframe = new THREE.WireframeGeometry( waterGeometry );
-    // const line = new THREE.LineSegments( wireframe );
-    // line.material.depthTest = false;
-    // // line.material.opacity = 0.25;
-    // line.material.transparent = true;
-    // const gridHelper = new THREE.GridHelper( 512, 5 0x0000ff, 0x808080 );
-	// 			// gridHelper.position.y = - 150;
-	// 			// gridHelper.position.x = - 150;
-	// 			scene.add( gridHelper );
-    // scene.add( line );
-    // var noiseTexture = new THREE.ImageUtils.loadTexture( './cloud.png' );
-	// noiseTexture.wrapS = noiseTexture.wrapT = THREE.RepeatWrapping; 
-    // console.log(noiseTexture);
-	// magnitude of noise effect
+
 	var noiseScale = 0.5;
 	
 
@@ -126,42 +112,22 @@ function init() {
         scene.environment = pmremGenerator.fromScene( sky ).texture;
 
     }
+
     vertexDisplacimente = 4.0;
     displacement = new Float32Array( water.geometry.attributes.position.count );
     noise = new Float32Array( water.geometry.attributes.position.count );
 
     for ( let i = 0; i < displacement.length; i ++ ) {
-
         noise[ i ] = Math.random() * 5;
-
     }
 
-
-    
-
     water.geometry.setAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
-    // vertexDisplacimente = new Float32Array(water.geometry.attributes.position.count)
-    // const normals = [];
-    // for(var i = 0; i < vertexDisplacimente.length; i += 1){
-    //     vertexDisplacimente[i] = Math.sin(i+40);
-        
-    // }
-
-    // water.geometry.verticesNeedUpdate = true;
-    
-
-    // waterGeometry.setAttribute('vertexDisplacimente', new THREE.BufferAttribute(vertexDisplacimente, 1));
-    // waterGeometry.setAttribute( 'normal', new THREE.Float32BufferAttribute( normals, 3 ) );
-   
     updateSun();
 
     //
-
     geometry = new THREE.BoxGeometry( 30, 30, 30 );
 
     const material = new THREE.MeshStandardMaterial( { roughness: 0 } );
-
-   
 
     controls = new OrbitControls( camera, renderer.domElement );
     controls.maxPolarAngle = Math.PI * 0.495;
@@ -253,30 +219,7 @@ function render() {
 
     uvAttribute = water.geometry.attributes.uv;
 
-
-    // for (var i = 0; i < uvAttribute.count; i++) {
-
-    //     var u = uvAttribute.getX(i);
-    //     var v = uvAttribute.getY(i);
-  
-    //     // do something with uv
-    //     u = u + Math.random() * Math.random();
-    //     v = v + Math.random() * Math.random() * 50.0;
-  
-  
-    //     // write values back to attribute
-    //     uvAttribute.setXY(i, u, v);
-    //   }
-
-   
-
     water.geometry.attributes.displacement.needsUpdate = true;
-
-    // for(var i = 0; i < water.geometry.attributes.position.count; i+= 1){
-       
-    //         water.geometry.attributes.position.setY(i + Math.sin(i + Math.random() * 0.25)) ;
-            
-    // }
 
     water.geometry.needsUpdate = true;
     uvAttribute.needsUpdate = true;
