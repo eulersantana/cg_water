@@ -5,7 +5,6 @@ import Stats from './jsm/libs/stats.module.js';
 import { GUI } from './jsm/libs/dat.gui.module.js';
 import { OrbitControls } from './jsm/controls/OrbitControls.js';
 import { Water } from './watter.js';
-import { Sky } from './sky.js';
 
 let container, stats;
 let camera, scene, renderer;
@@ -78,40 +77,24 @@ function init() {
   
     scene.add( water );
 
-    // // Skybox
+  
 
-    // const sky = new Sky();
-    // sky.scale.setScalar( 10000 );
-    // // scene.add( sky );
-
-    // const skyUniforms = sky.material.uniforms;
-
-    // skyUniforms[ 'turbidity' ].value = 100;
-    // skyUniforms[ 'rayleigh' ].value = 20;
-    // skyUniforms[ 'mieCoefficient' ].value = 0.0005;
-    // skyUniforms[ 'mieDirectionalG' ].value = 0.8;
-
-    // const parameters = {
-    //     elevation: 100,
-    //     azimuth: 180
-    // };
+   
 
 
     const pmremGenerator = new THREE.PMREMGenerator( renderer );
 
-    // function updateSun() {
+    function updateSun() {
 
-    //     const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
-    //     const theta = THREE.MathUtils.degToRad( parameters.azimuth );
+        const phi = THREE.MathUtils.degToRad( 90 - 90 );
+        const theta = THREE.MathUtils.degToRad( 100 );
 
-    //     sun.setFromSphericalCoords( 1, phi, theta );
+        sun.setFromSphericalCoords( 1, phi, theta );
 
-    //     sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
-    //     water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
+        water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
 
-    //     scene.environment = pmremGenerator.fromScene( sky ).texture;
 
-    // }
+    }
 
     vertexDisplacimente = 4.0;
     displacement = new Float32Array( water.geometry.attributes.position.count );
@@ -122,7 +105,7 @@ function init() {
     }
 
     water.geometry.setAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
-    // updateSun();
+    updateSun();
 
     //
     geometry = new THREE.BoxGeometry( 30, 30, 30 );
@@ -145,10 +128,6 @@ function init() {
 
     const gui = new GUI();
 
-    const folderSky = gui.addFolder( 'Sky' );
-    folderSky.add( parameters, 'elevation', 0, 90, 0.1 ).onChange( updateSun );
-    folderSky.add( parameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSun );
-    folderSky.open();
 
     const waterUniforms = water.material.uniforms;
     
