@@ -9,7 +9,6 @@ import { Water } from './watter.js';
 let container, stats;
 let camera, scene, renderer;
 let controls, water, sun, mesh, clock;
-var vertexDisplacimente;
 var  geometry , geometryPostions, waterGeometry;
 let alpha = 0;
 let count = 0;
@@ -48,8 +47,6 @@ function init() {
 
     waterGeometry = new THREE.PlaneBufferGeometry( 10000, 10000, 50, 50 );
 
-	var noiseScale = 0.5;
-	
 
     water = new Water(
         waterGeometry,
@@ -59,18 +56,14 @@ function init() {
             waterNormals: new THREE.TextureLoader().load( './textures/waternormals.jpeg', function ( texture ) {
                 // console.log(texture)
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-                texture.anisotropy = 16;
 
             } ),
-            sunDirection: new THREE.Vector3(),
-            sunColor: 0xffffff,
             waterColor: 0x001e0f, //new THREE.Color('blue'),//0x001e0f
             distortionScale: 3.7,
             fog: scene.fog !== undefined,
             alpha: alpha
         }
     );
-    water.wireframe = true;
     water.rotation.x = - Math.PI / 2;
     
     // water.updateMatrix();
@@ -96,7 +89,6 @@ function init() {
 
     }
 
-    vertexDisplacimente = 4.0;
     displacement = new Float32Array( water.geometry.attributes.position.count );
     noise = new Float32Array( water.geometry.attributes.position.count );
 
@@ -108,9 +100,7 @@ function init() {
     updateSun();
 
     //
-    geometry = new THREE.BoxGeometry( 30, 30, 30 );
 
-    const material = new THREE.MeshStandardMaterial( { roughness: 0 } );
 
     controls = new OrbitControls( camera, renderer.domElement );
     controls.maxPolarAngle = Math.PI * 0.495;
@@ -133,10 +123,10 @@ function init() {
     
 
     const folderWater = gui.addFolder( 'Water' );
-    folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
-    folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
+    // folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
+    // folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
     // folderWater.add( velocity, 'value', 10,  100000, 1 ).name( 'Velocity' );
-    folderWater.add( altura, 'value',1,  60, 2 ).name( 'altura');
+    folderWater.add( altura, 'value',1,  60, 1 ).name( 'altura');
     folderWater.open();
 
     //
